@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Interaction</title>
+<style>
+  body {
+    background-color: #e9e5d8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .container {
+    position: relative;
+    width: 360px;
+    height: 780px;
+    background: url('https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0789.png') center/cover no-repeat;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  /* Ly */
+  .cup {
+    position: absolute;
+    bottom: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .cup:active {
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  /* Làn khói */
+  .steam {
+    position: absolute;
+    bottom: 310px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 180px;
+    background: radial-gradient(circle at 50% 80%, rgba(255,255,255,0.5), transparent 70%);
+    border-radius: 50%;
+    filter: blur(10px);
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 0.5s ease;
+    animation: floatUp 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+    100% { transform: translateX(-50%) translateY(-10px); opacity: 0.4; }
+  }
+
+  /* Hiệu ứng chạm (gif) */
+  .hit-effect {
+    position: absolute;
+    bottom: 170px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 160px;
+    display: none;
+    pointer-events: none;
+  }
+
+  /* Chữ Start */
+  .start-text {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    color: #5b3b2c;
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="steam"></div>
+  <img class="cup" src="https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0791.png" alt="cup">
+  <img class="hit-effect" src="https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif" alt="hit">
+  <div class="start-text">Start</div>
+</div>
+
+<audio id="glassSound" src="amthanh.xx"></audio>
+
+<script>
+  const steam = document.querySelector('.steam');
+  const cup = document.querySelector('.cup');
+  const hitEffect = document.querySelector('.hit-effect');
+  const glassSound = document.getElementById('glassSound');
+  const startText = document.querySelector('.start-text');
+
+  // Hiệu ứng khói mờ rồi trở lại
+  steam.addEventListener('click', () => {
+    steam.style.opacity = 0.1;
+    setTimeout(() => {
+      steam.style.opacity = 0.6;
+    }, 500);
+  });
+
+  // Hiệu ứng khi bấm ly
+  cup.addEventListener('click', () => {
+    glassSound.currentTime = 0;
+    glassSound.play();
+
+    // Hiển thị hiệu ứng gif va chạm
+    hitEffect.style.display = 'block';
+    setTimeout(() => {
+      hitEffect.style.display = 'none';
+    }, 700);
+  });
+
+  // Bấm Start -> sang coffee.html
+  startText.addEventListener('click', () => {
+    window.location.href = 'coffee.html';
+  });
+</script>
+
+</body>
+</html>
