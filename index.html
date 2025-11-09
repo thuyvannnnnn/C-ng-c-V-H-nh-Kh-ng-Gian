@@ -5,32 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coffee Interaction</title>
 <style>
-  body {
-    background-color: #e9e5d8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-
-  .container {
-    position: relative;
-    width: 360px;
-    height: 780px;
-    background: url('https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0789.png') center/cover no-repeat;
-    border-radius: 12px;
+  /* Không cho cuộn trang */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
     overflow: hidden;
+    background-color: #000;
   }
 
-  /* Ly */
+  /* Nền toàn màn hình */
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  /* Ảnh ly */
   .cup {
-    position: absolute;
-    bottom: 180px;
+    position: fixed;
+    bottom: 15%;
     left: 50%;
     transform: translateX(-50%);
-    width: 140px;
+    width: 160px;
     height: auto;
     cursor: pointer;
+    z-index: 2;
     transition: transform 0.2s ease;
   }
   .cup:active {
@@ -39,8 +43,8 @@
 
   /* Làn khói */
   .steam {
-    position: absolute;
-    bottom: 310px;
+    position: fixed;
+    bottom: 35%;
     left: 50%;
     transform: translateX(-50%);
     width: 80px;
@@ -50,6 +54,7 @@
     filter: blur(10px);
     opacity: 0.6;
     cursor: pointer;
+    z-index: 1;
     transition: opacity 0.5s ease;
     animation: floatUp 3s ease-in-out infinite alternate;
   }
@@ -59,51 +64,51 @@
     100% { transform: translateX(-50%) translateY(-10px); opacity: 0.4; }
   }
 
-  /* Hiệu ứng chạm (gif) */
-  .hit-effect {
-    position: absolute;
-    bottom: 170px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 160px;
-    height: 160px;
-    display: none;
-    pointer-events: none;
-  }
-
   /* Chữ Start */
   .start-text {
-    position: absolute;
-    bottom: 120px;
+    position: fixed;
+    bottom: 8%;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Segoe UI', sans-serif;
-    font-size: 18px;
+    font-size: 20px;
     color: #5b3b2c;
     letter-spacing: 1px;
     cursor: pointer;
+    z-index: 2;
+  }
+
+  /* Hiệu ứng chạm */
+  .hit-effect {
+    position: fixed;
+    width: 160px;
+    height: 160px;
+    pointer-events: none;
+    display: none;
+    transform: translate(-50%, -50%);
+    z-index: 3;
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="steam"></div>
-  <img class="cup" src="https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0791.png" alt="cup">
-  <img class="hit-effect" src="https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif" alt="hit">
-  <div class="start-text">Start</div>
-</div>
+<img class="background" src="https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0789.png" alt="background">
+
+<div class="steam"></div>
+<img class="cup" src="https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0791.png" alt="cup">
+<div class="start-text">Start</div>
+<img class="hit-effect" src="https://github.com/thuyvannnnnn/Q-e/raw/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif" alt="hit">
 
 <audio id="glassSound" src="amthanh.xx"></audio>
 
 <script>
   const steam = document.querySelector('.steam');
   const cup = document.querySelector('.cup');
+  const startText = document.querySelector('.start-text');
   const hitEffect = document.querySelector('.hit-effect');
   const glassSound = document.getElementById('glassSound');
-  const startText = document.querySelector('.start-text');
 
-  // Hiệu ứng khói mờ rồi trở lại
+  // Khi bấm vào khói: mờ đi rồi trở lại
   steam.addEventListener('click', () => {
     steam.style.opacity = 0.1;
     setTimeout(() => {
@@ -111,21 +116,29 @@
     }, 500);
   });
 
-  // Hiệu ứng khi bấm ly
+  // Khi bấm vào ly: phát âm thanh
   cup.addEventListener('click', () => {
     glassSound.currentTime = 0;
     glassSound.play();
+  });
 
-    // Hiển thị hiệu ứng gif va chạm
+  // Khi bấm "Start": sang coffee.html
+  startText.addEventListener('click', () => {
+    window.location.href = 'coffee.html';
+  });
+
+  // Khi chạm ở bất kỳ đâu: hiện hiệu ứng gif tại vị trí chạm
+  document.addEventListener('click', (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+
+    hitEffect.style.left = `${x}px`;
+    hitEffect.style.top = `${y}px`;
     hitEffect.style.display = 'block';
+
     setTimeout(() => {
       hitEffect.style.display = 'none';
     }, 700);
-  });
-
-  // Bấm Start -> sang coffee.html
-  startText.addEventListener('click', () => {
-    window.location.href = 'coffee.html';
   });
 </script>
 
