@@ -21,8 +21,8 @@
 
   #cup {
     position: absolute;
-    width: 200px;
-    top: 50%;
+    width: 220px; /* to hơn 10% (200 → 220) */
+    top: 55%; /* xuống thêm 5% */
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
@@ -31,7 +31,7 @@
 
   #start {
     position: absolute;
-    top: calc(50% + 180px);
+    top: calc(50% + 130px); /* lên thêm 5% */
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Arial', sans-serif;
@@ -43,7 +43,7 @@
 
   #smoke {
     position: absolute;
-    top: 40%;
+    top: 38%;
     left: 50%;
     transform: translateX(-50%);
     width: 150px;
@@ -53,7 +53,7 @@
 
   .touch {
     position: absolute;
-    width: 60px; /* ảnh chạm nhỏ hơn */
+    width: 30px; /* giảm 50% so với 60px */
     height: auto;
     pointer-events: none;
     transform: translate(-50%, -50%);
@@ -70,7 +70,7 @@
 <audio id="glass-sound" src="âmthanh.xx"></audio>
 
 <script>
-  // Chạm màn hình → hiện ảnh chạm
+  // Chạm màn hình → hiện ảnh chạm đúng vị trí
   document.body.addEventListener('click', function(e) {
     const touchImg = document.createElement('img');
     touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif';
