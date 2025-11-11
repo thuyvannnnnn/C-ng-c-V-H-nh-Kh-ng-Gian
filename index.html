@@ -8,7 +8,7 @@
   html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden; /* không kéo được */
+    overflow: hidden;
     height: 100vh;
     width: 100vw;
   }
@@ -21,8 +21,8 @@
 
   #cup {
     position: absolute;
-    width: 220px; /* to hơn 10% (200 → 220) */
-    top: 55%; /* xuống thêm 5% */
+    width: 242px; /* tăng thêm 10% so với 220px */
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
@@ -31,7 +31,7 @@
 
   #start {
     position: absolute;
-    top: calc(50% + 130px); /* lên thêm 5% */
+    top: calc(50% + 220px); /* xuống thêm 10% nữa (tăng từ 130px lên khoảng 220px) */
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Arial', sans-serif;
@@ -53,7 +53,7 @@
 
   .touch {
     position: absolute;
-    width: 30px; /* giảm 50% so với 60px */
+    width: 30px;
     height: auto;
     pointer-events: none;
     transform: translate(-50%, -50%);
@@ -65,12 +65,12 @@
 
 <img id="smoke" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif" alt="Smoke">
 <img id="cup" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0791.png" alt="Cup">
-<div id="start">Start</div>
+<div id="start">Bắt đầu</div>
 
 <audio id="glass-sound" src="âmthanh.xx"></audio>
 
 <script>
-  // Chạm màn hình → hiện ảnh chạm đúng vị trí
+  // Hiệu ứng chạm — chỉ xuất hiện tại vị trí chạm trong 1 giây
   document.body.addEventListener('click', function(e) {
     const touchImg = document.createElement('img');
     touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif';
@@ -81,16 +81,16 @@
 
     setTimeout(() => {
       touchImg.remove();
-    }, 800);
+    }, 1000); // tồn tại trong 1 giây
   });
 
   // Bấm ly → phát âm thanh
   document.getElementById('cup').addEventListener('click', function(e) {
-    e.stopPropagation(); // để không tạo hiệu ứng chạm
+    e.stopPropagation();
     document.getElementById('glass-sound').play();
   });
 
-  // Bấm Start → chuyển trang
+  // Bấm Bắt đầu → chuyển trang
   document.getElementById('start').addEventListener('click', function(e) {
     e.stopPropagation();
     window.location.href = 'coffee.html';
