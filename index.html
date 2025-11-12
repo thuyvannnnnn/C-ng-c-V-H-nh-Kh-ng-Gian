@@ -14,7 +14,7 @@
   }
 
   body {
-    background: url('https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0789.png') no-repeat center center fixed;
+    background: url('https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ne%CC%82%CC%80n.PNG') no-repeat center center fixed;
     background-size: cover;
     position: relative;
   }
@@ -33,14 +33,13 @@
   /* Nút Start */
   #start {
     position: absolute;
-    top: calc(55% + 130px); /* ban đầu +180px → giờ nâng lên 5% (khoảng 50px) */
+    top: calc(55% + 130px); /* dịch lên 5% so với cũ */
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Arial', sans-serif;
-    color: #643d2a;
-    font-size: 22px;
+    width: 120px;
+    height: auto;
     cursor: pointer;
-    z-index: 5;
+    z-index: 6;
   }
 
   /* Khói */
@@ -57,7 +56,7 @@
   /* Ảnh hiệu ứng chạm */
   .touch {
     position: absolute;
-    width: 30px; /* giảm 50% kích thước (trước là 60px) */
+    width: 30px; /* giảm 50% kích thước */
     height: auto;
     pointer-events: none;
     transform: translate(-50%, -50%);
@@ -67,17 +66,17 @@
 </head>
 <body>
 
-<img id="smoke" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif" alt="Smoke">
-<img id="cup" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0791.png" alt="Cup">
-<div id="start">Start</div>
+<img id="smoke" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Kho%CC%81i.GIF" alt="Smoke">
+<img id="cup" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ly.PNG" alt="Cup">
+<img id="start" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Tie%CC%82%CC%81p.png" alt="Start">
 
 <audio id="glass-sound" src="âmthanh.xx"></audio>
 
 <script>
-  // Chạm màn hình → hiện ảnh chạm tại vị trí ngón chạm
+  // Hiệu ứng chạm trên màn hình
   document.body.addEventListener('click', function(e) {
     const touchImg = document.createElement('img');
-    touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif';
+    touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Cha%CC%A3m.gif';
     touchImg.className = 'touch';
     touchImg.style.left = e.pageX + 'px';
     touchImg.style.top = e.pageY + 'px';
@@ -94,7 +93,7 @@
     document.getElementById('glass-sound').play();
   });
 
-  // Bấm Start → chuyển trang
+  // Bấm Start → chuyển sang coffee.html
   document.getElementById('start').addEventListener('click', function(e) {
     e.stopPropagation();
     window.location.href = 'coffee.html';
