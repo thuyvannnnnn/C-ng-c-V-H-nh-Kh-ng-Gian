@@ -8,7 +8,7 @@
   html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden; /* không thể kéo */
+    overflow: hidden;
     height: 100vh;
     width: 100vw;
   }
@@ -19,17 +19,17 @@
     position: relative;
   }
 
-  /* Ảnh khói - phủ nửa trên màn hình */
+  /* Khói - phủ nửa trên, dịch xuống 20% */
   #smoke {
     position: absolute;
-    top: 0;
+    top: 20%; /* Dịch xuống 20% */
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
     height: 50vh;
     object-fit: cover;
     z-index: 3;
-    transition: opacity 0.5s ease;
+    pointer-events: none; /* để không che bắt sự kiện */
   }
 
   /* Ly */
@@ -46,22 +46,36 @@
   /* Nút Tiếp */
   #next {
     position: absolute;
-    top: calc(58% + 120px); /* nằm dưới ly một chút */
+    top: calc(58% + 90px); /* gần hơn so với ly */
     left: 50%;
     transform: translateX(-50%);
     width: 120px;
     cursor: pointer;
-    z-index: 5;
+    z-index: 6;
   }
 
   /* Ảnh chạm */
   .touch {
     position: absolute;
-    width: 30px; /* nhỏ 50% */
+    width: 30px;
     height: auto;
     pointer-events: none;
     transform: translate(-50%, -50%);
     z-index: 10;
+  }
+
+  /* Hiệu ứng mờ khói nhỏ */
+  .smoke-blur {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    filter: blur(10px);
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    opacity: 1;
+    transition: opacity 0.5s ease;
   }
 </style>
 </head>
@@ -80,8 +94,9 @@
 <audio id="glass-sound" src="âmthanh.xx"></audio>
 
 <script>
-  // Chạm vào màn hình => hiện ảnh chạm ngay tại vị trí bấm
+  // Hiệu ứng chạm
   document.body.addEventListener('click', function(e) {
+    // Ảnh chạm xuất hiện
     const touchImg = document.createElement('img');
     touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Cha%CC%A3m.gif';
     touchImg.className = 'touch';
@@ -89,27 +104,28 @@
     touchImg.style.top = e.pageY + 'px';
     document.body.appendChild(touchImg);
 
-    // Xóa sau 0.8 giây
+    // Mờ khói tại vị trí chạm
+    const blur = document.createElement('div');
+    blur.className = 'smoke-blur';
+    blur.style.left = e.pageX + 'px';
+    blur.style.top = e.pageY + 'px';
+    document.body.appendChild(blur);
+
+    // Xóa sau 0.8s
     setTimeout(() => {
       touchImg.remove();
+      blur.style.opacity = '0';
+      setTimeout(() => blur.remove(), 500);
     }, 800);
   });
 
-  // Bấm ly => phát âm thanh
+  // Bấm ly -> phát âm thanh
   document.getElementById('cup').addEventListener('click', function(e) {
     e.stopPropagation();
     document.getElementById('glass-sound').play();
   });
 
-  // Bấm khói => mờ đi 0.5s rồi trở lại
-  document.getElementById('smoke').addEventListener('click', function(e) {
-    e.stopPropagation();
-    const smoke = e.target;
-    smoke.style.opacity = '0';
-    setTimeout(() => smoke.style.opacity = '1', 500);
-  });
-
-  // Bấm nút Tiếp => sang trang coffee.html
+  // Bấm Tiếp -> sang trang khác
   document.getElementById('next').addEventListener('click', function(e) {
     e.stopPropagation();
     window.location.href = 'coffee.html';
