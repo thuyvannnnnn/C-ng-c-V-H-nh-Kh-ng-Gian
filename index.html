@@ -8,7 +8,7 @@
   html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden; /* không kéo được */
+    overflow: hidden; /* không thể kéo */
     height: 100vh;
     width: 100vw;
   }
@@ -19,44 +19,45 @@
     position: relative;
   }
 
-  /* Ly trà */
+  /* Ảnh khói - phủ nửa trên màn hình */
+  #smoke {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 50vh;
+    object-fit: cover;
+    z-index: 3;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Ly */
   #cup {
     position: absolute;
-    width: 220px; /* tăng 10% so với 200px */
-    top: 55%;     /* dịch xuống thêm 5% */
+    width: 220px;
+    top: 58%;
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
     z-index: 5;
   }
 
-  /* Nút Start */
-  #start {
+  /* Nút Tiếp */
+  #next {
     position: absolute;
-    top: calc(55% + 130px); /* dịch lên 5% so với cũ */
+    top: calc(58% + 120px); /* nằm dưới ly một chút */
     left: 50%;
     transform: translateX(-50%);
     width: 120px;
-    height: auto;
     cursor: pointer;
-    z-index: 6;
+    z-index: 5;
   }
 
-  /* Khói */
-  #smoke {
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    z-index: 4;
-    transition: opacity 0.5s ease;
-  }
-
-  /* Ảnh hiệu ứng chạm */
+  /* Ảnh chạm */
   .touch {
     position: absolute;
-    width: 30px; /* giảm 50% kích thước */
+    width: 30px; /* nhỏ 50% */
     height: auto;
     pointer-events: none;
     transform: translate(-50%, -50%);
@@ -66,14 +67,20 @@
 </head>
 <body>
 
-<img id="smoke" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Kho%CC%81i.GIF" alt="Smoke">
-<img id="cup" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ly.PNG" alt="Cup">
-<img id="start" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Tie%CC%82%CC%81p.png" alt="Start">
+<!-- Khói -->
+<img id="smoke" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Kho%CC%81i.GIF" alt="Khói">
 
+<!-- Ly -->
+<img id="cup" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ly.PNG" alt="Ly">
+
+<!-- Nút Tiếp -->
+<img id="next" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Tie%CC%82%CC%81p.png" alt="Tiếp">
+
+<!-- Âm thanh va chạm -->
 <audio id="glass-sound" src="âmthanh.xx"></audio>
 
 <script>
-  // Hiệu ứng chạm trên màn hình
+  // Chạm vào màn hình => hiện ảnh chạm ngay tại vị trí bấm
   document.body.addEventListener('click', function(e) {
     const touchImg = document.createElement('img');
     touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Cha%CC%A3m.gif';
@@ -82,29 +89,30 @@
     touchImg.style.top = e.pageY + 'px';
     document.body.appendChild(touchImg);
 
+    // Xóa sau 0.8 giây
     setTimeout(() => {
       touchImg.remove();
     }, 800);
   });
 
-  // Bấm ly → phát âm thanh
+  // Bấm ly => phát âm thanh
   document.getElementById('cup').addEventListener('click', function(e) {
-    e.stopPropagation(); // tránh tạo hiệu ứng chạm
+    e.stopPropagation();
     document.getElementById('glass-sound').play();
   });
 
-  // Bấm Start → chuyển sang coffee.html
-  document.getElementById('start').addEventListener('click', function(e) {
-    e.stopPropagation();
-    window.location.href = 'coffee.html';
-  });
-
-  // Bấm khói → mờ đi 0.5s rồi hiện lại
+  // Bấm khói => mờ đi 0.5s rồi trở lại
   document.getElementById('smoke').addEventListener('click', function(e) {
     e.stopPropagation();
     const smoke = e.target;
     smoke.style.opacity = '0';
     setTimeout(() => smoke.style.opacity = '1', 500);
+  });
+
+  // Bấm nút Tiếp => sang trang coffee.html
+  document.getElementById('next').addEventListener('click', function(e) {
+    e.stopPropagation();
+    window.location.href = 'coffee.html';
   });
 </script>
 
