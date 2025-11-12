@@ -1,136 +1,81 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coffee Intro</title>
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang quảng cáo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  body {
-    background: url('https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ne%CC%82%CC%80n.PNG') no-repeat center center fixed;
-    background-size: cover;
-    position: relative;
-  }
+    body {
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background: url("https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ne%CC%82%CC%80n.PNG") no-repeat center/cover;
+    }
 
-  /* Khói - phủ nửa trên, dịch xuống 20% */
-  #smoke {
-    position: absolute;
-    top: 20%; /* Dịch xuống 20% */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    height: 50vh;
-    object-fit: cover;
-    z-index: 3;
-    pointer-events: none; /* để không che bắt sự kiện */
-  }
+    #khoi {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: auto;
+    }
 
-  /* Ly */
-  #cup {
-    position: absolute;
-    width: 220px;
-    top: 58%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    cursor: pointer;
-    z-index: 5;
-  }
+    #ly {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60vw; /* có thể chỉnh lại cho vừa */
+      height: auto;
+    }
 
-  /* Nút Tiếp */
-  #next {
-    position: absolute;
-    top: calc(58% + 90px); /* gần hơn so với ly */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    cursor: pointer;
-    z-index: 6;
-  }
+    #tiep {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 35vw;
+      bottom: 12%;
+    }
 
-  /* Ảnh chạm */
-  .touch {
-    position: absolute;
-    width: 30px;
-    height: auto;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-  }
+    .cham {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: fadeOut 1s ease forwards;
+    }
 
-  /* Hiệu ứng mờ khói nhỏ */
-  .smoke-blur {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    filter: blur(10px);
-    transform: translate(-50%, -50%);
-    z-index: 4;
-    opacity: 1;
-    transition: opacity 0.5s ease;
-  }
-</style>
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+    }
+  </style>
 </head>
 <body>
+  <img id="khoi" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Kho%CC%81i.GIF" alt="Khói" />
+  <img id="ly" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ly.PNG" alt="Ly" />
+  <img id="tiep" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Tie%CC%82%CC%81p.png" alt="Tiếp" />
 
-<!-- Khói -->
-<img id="smoke" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Kho%CC%81i.GIF" alt="Khói">
+  <script>
+    document.body.addEventListener("click", function(e) {
+      const cham = document.createElement("img");
+      cham.src = "https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Cha%CC%A3m.gif";
+      cham.className = "cham";
+      cham.style.left = e.clientX + "px";
+      cham.style.top = e.clientY + "px";
+      document.body.appendChild(cham);
 
-<!-- Ly -->
-<img id="cup" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ly.PNG" alt="Ly">
-
-<!-- Nút Tiếp -->
-<img id="next" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Tie%CC%82%CC%81p.png" alt="Tiếp">
-
-<!-- Âm thanh va chạm -->
-<audio id="glass-sound" src="âmthanh.xx"></audio>
-
-<script>
-  // Hiệu ứng chạm
-  document.body.addEventListener('click', function(e) {
-    // Ảnh chạm xuất hiện
-    const touchImg = document.createElement('img');
-    touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Cha%CC%A3m.gif';
-    touchImg.className = 'touch';
-    touchImg.style.left = e.pageX + 'px';
-    touchImg.style.top = e.pageY + 'px';
-    document.body.appendChild(touchImg);
-
-    // Mờ khói tại vị trí chạm
-    const blur = document.createElement('div');
-    blur.className = 'smoke-blur';
-    blur.style.left = e.pageX + 'px';
-    blur.style.top = e.pageY + 'px';
-    document.body.appendChild(blur);
-
-    // Xóa sau 0.8s
-    setTimeout(() => {
-      touchImg.remove();
-      blur.style.opacity = '0';
-      setTimeout(() => blur.remove(), 500);
-    }, 800);
-  });
-
-  // Bấm ly -> phát âm thanh
-  document.getElementById('cup').addEventListener('click', function(e) {
-    e.stopPropagation();
-    document.getElementById('glass-sound').play();
-  });
-
-  // Bấm Tiếp -> sang trang khác
-  document.getElementById('next').addEventListener('click', function(e) {
-    e.stopPropagation();
-    window.location.href = 'coffee.html';
-  });
-</script>
-
+      // Tự xóa sau 1s để không bị rác DOM
+      setTimeout(() => cham.remove(), 1000);
+    });
+  </script>
 </body>
 </html>
