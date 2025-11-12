@@ -8,7 +8,7 @@
   html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: hidden; /* không kéo được */
     height: 100vh;
     width: 100vw;
   }
@@ -19,31 +19,34 @@
     position: relative;
   }
 
+  /* Ly trà */
   #cup {
     position: absolute;
-    width: 242px; /* tăng thêm 10% so với 220px */
-    top: 55%;
+    width: 220px; /* tăng 10% so với 200px */
+    top: 55%;     /* dịch xuống thêm 5% */
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
     z-index: 5;
   }
 
+  /* Nút Start */
   #start {
     position: absolute;
-    top: calc(50% + 170px); /* lên thêm 5% (giảm từ 220px xuống 170px) */
+    top: calc(55% + 130px); /* ban đầu +180px → giờ nâng lên 5% (khoảng 50px) */
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Arial', sans-serif;
     color: #643d2a;
-    font-size: 20.9px; /* nhỏ hơn 5% */
+    font-size: 22px;
     cursor: pointer;
     z-index: 5;
   }
 
+  /* Khói */
   #smoke {
     position: absolute;
-    top: 38%;
+    top: 35%;
     left: 50%;
     transform: translateX(-50%);
     width: 150px;
@@ -51,9 +54,10 @@
     transition: opacity 0.5s ease;
   }
 
+  /* Ảnh hiệu ứng chạm */
   .touch {
     position: absolute;
-    width: 30px;
+    width: 30px; /* giảm 50% kích thước (trước là 60px) */
     height: auto;
     pointer-events: none;
     transform: translate(-50%, -50%);
@@ -65,12 +69,12 @@
 
 <img id="smoke" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif" alt="Smoke">
 <img id="cup" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0791.png" alt="Cup">
-<div id="start">Bắt đầu</div>
+<div id="start">Start</div>
 
 <audio id="glass-sound" src="âmthanh.xx"></audio>
 
 <script>
-  // Hiệu ứng chạm — chỉ hiện khi người dùng chạm, không hiện sẵn
+  // Chạm màn hình → hiện ảnh chạm tại vị trí ngón chạm
   document.body.addEventListener('click', function(e) {
     const touchImg = document.createElement('img');
     touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif';
@@ -79,19 +83,18 @@
     touchImg.style.top = e.pageY + 'px';
     document.body.appendChild(touchImg);
 
-    // Tự động biến mất sau 1 giây
     setTimeout(() => {
       touchImg.remove();
-    }, 1000);
+    }, 800);
   });
 
   // Bấm ly → phát âm thanh
   document.getElementById('cup').addEventListener('click', function(e) {
-    e.stopPropagation();
+    e.stopPropagation(); // tránh tạo hiệu ứng chạm
     document.getElementById('glass-sound').play();
   });
 
-  // Bấm Bắt đầu → chuyển trang
+  // Bấm Start → chuyển trang
   document.getElementById('start').addEventListener('click', function(e) {
     e.stopPropagation();
     window.location.href = 'coffee.html';
