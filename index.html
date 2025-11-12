@@ -31,12 +31,12 @@
 
   #start {
     position: absolute;
-    top: calc(50% + 220px); /* xuống thêm 10% nữa (tăng từ 130px lên khoảng 220px) */
+    top: calc(50% + 170px); /* lên thêm 5% (giảm từ 220px xuống 170px) */
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Arial', sans-serif;
     color: #643d2a;
-    font-size: 22px;
+    font-size: 20.9px; /* nhỏ hơn 5% */
     cursor: pointer;
     z-index: 5;
   }
@@ -70,7 +70,7 @@
 <audio id="glass-sound" src="âmthanh.xx"></audio>
 
 <script>
-  // Hiệu ứng chạm — chỉ xuất hiện tại vị trí chạm trong 1 giây
+  // Hiệu ứng chạm — chỉ hiện khi người dùng chạm, không hiện sẵn
   document.body.addEventListener('click', function(e) {
     const touchImg = document.createElement('img');
     touchImg.src = 'https://raw.githubusercontent.com/thuyvannnnnn/Q-e/2e66075b2e2649579bf3bca6747ebffe6b0d0fdc/IMG_0838.gif';
@@ -79,9 +79,10 @@
     touchImg.style.top = e.pageY + 'px';
     document.body.appendChild(touchImg);
 
+    // Tự động biến mất sau 1 giây
     setTimeout(() => {
       touchImg.remove();
-    }, 1000); // tồn tại trong 1 giây
+    }, 1000);
   });
 
   // Bấm ly → phát âm thanh
