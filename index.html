@@ -1,83 +1,353 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trang quảng cáo</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cà Phê Muối</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      overflow: hidden;
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      background: url("https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ne%CC%82%CC%80n.PNG") no-repeat center/cover;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
 
-    #khoi {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: auto;
-    }
+        .orientation-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
 
-    /* Ly to hơn 10% và dịch xuống thêm 5% */
-    #ly {
-      position: absolute;
-      top: 55%; /* trước là 50% → xuống thêm 5% */
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 66vw;
-      height: auto;
-    }
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+        }
 
-    /* Tiếp to thêm 10% nữa (tổng +21%) */
-    #tiep {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 42.5vw; /* trước là 38.5vw → +10% nữa */
-      bottom: 12%;
-    }
+        .active {
+            display: flex;
+        }
 
-    .cham {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      animation: fadeOut 1s ease forwards;
-      filter: contrast(150%) brightness(120%);
-    }
+        .intro-gif {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
-    @keyframes fadeOut {
-      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
-    }
-  </style>
+        .info-settings {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .continue-prompt {
+            position: absolute;
+            bottom: 20px;
+            width: 200px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        .content-image {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .nav-bar {
+            position: absolute;
+            bottom: 20px;
+            width: 80%;
+            height: 8px;
+            background-color: #8B4513;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10%;
+        }
+
+        .nav-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #D2B48C;
+            transform: translateY(-4px);
+        }
+
+        .nav-dot.active {
+            width: 24px;
+            height: 24px;
+            background-color: #8B4513;
+            border: 2px solid #D2B48C;
+        }
+
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: rgba(139, 69, 19, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .nav-arrow.left {
+            left: 10px;
+        }
+
+        .nav-arrow.right {
+            right: 10px;
+        }
+
+        .detail-button {
+            position: absolute;
+            bottom: 50px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <img id="khoi" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Kho%CC%81i.GIF" alt="Khói" />
-  <img id="ly" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Ly.PNG" alt="Ly" />
-  <img id="tiep" src="https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Tie%CC%82%CC%81p.png" alt="Tiếp" />
+    <!-- Màn hình yêu cầu xoay ngang -->
+    <div class="orientation-message" id="orientationMessage">
+        <h2>Vui lòng xoay ngang điện thoại</h2>
+        <p>Để có trải nghiệm tốt nhất, hãy xoay ngang thiết bị của bạn</p>
+    </div>
 
-  <script>
-    document.body.addEventListener("click", function(e) {
-      const cham = document.createElement("img");
-      cham.src = "https://raw.githubusercontent.com/thuyvannnnnn/Q-e/ae82f250732be9eb5ef0b4e318a632f0c294ea77/Cha%CC%A3m.gif";
-      cham.className = "cham";
-      cham.style.left = e.clientX + "px";
-      cham.style.top = e.clientY + "px";
-      document.body.appendChild(cham);
+    <!-- Màn hình mở đầu (Intro) -->
+    <div class="screen active" id="introScreen" style="background-image: url('https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ne%CC%82%CC%80n.PNG?raw=true');">
+        <img src="https://github.com/thuyvannnnnn/Q-e/blob/c735701871474faf0ba25bcb58896fea36a04074/%C4%90%E1%BA%B7t%20ngay%20%E2%80%93%20th%C6%B0%E1%BB%9Fng%20th%E1%BB%A9c%20li%E1%BB%81n.%20(1).gif?raw=true" alt="Intro 1" class="intro-gif" id="introGif1">
+        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ca%CC%80i%20%C4%91a%CC%A3%CC%86t%20gif.gif?raw=true" alt="Cài đặt" class="info-settings">
+        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ba%CC%82%CC%81m%20%C4%91e%CC%82%CC%89%20tie%CC%82%CC%81p%20gif.gif?raw=true" alt="Bấm để tiếp tục" class="continue-prompt" id="continuePrompt">
+    </div>
 
-      setTimeout(() => cham.remove(), 1000);
-    });
-  </script>
+    <!-- Màn hình Nguồn - Thành phần - Hương vị -->
+    <div class="screen" id="contentScreen" style="background-image: url('https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ne%CC%82%CC%80n.PNG?raw=true');">
+        <div class="nav-arrow left" id="leftArrow">‹</div>
+        <div class="nav-arrow right" id="rightArrow">›</div>
+        
+        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/nguo%CC%82%CC%80n.png?raw=true" alt="Nguồn" class="content-image" id="contentImage">
+        
+        <div class="nav-bar">
+            <div class="nav-dot" id="dot1"></div>
+            <div class="nav-dot active" id="dot2"></div>
+            <div class="nav-dot" id="dot3"></div>
+        </div>
+        
+        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/xem%20chi%20tie%CC%82%CC%81t%20.png?raw=true" alt="Xem chi tiết" class="detail-button" id="detailButton">
+    </div>
+
+    <!-- Màn hình chi tiết -->
+    <div class="screen" id="detailScreen" style="background-image: url('https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ne%CC%82%CC%80n.PNG?raw=true');">
+        <div class="nav-arrow left" id="detailLeftArrow">‹</div>
+        <div class="nav-arrow right" id="detailRightArrow">›</div>
+        
+        <img src="" alt="Chi tiết" class="content-image" id="detailImage">
+        
+        <div class="nav-bar">
+            <div class="nav-dot" id="detailDot1"></div>
+            <div class="nav-dot active" id="detailDot2"></div>
+            <div class="nav-dot" id="detailDot3"></div>
+        </div>
+        
+        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/%C4%91o%CC%81ng.png?raw=true" alt="Đóng" class="close-button" id="closeButton">
+    </div>
+
+    <script>
+        // Kiểm tra hướng màn hình
+        function checkOrientation() {
+            const orientationMessage = document.getElementById('orientationMessage');
+            if (window.innerHeight > window.innerWidth) {
+                orientationMessage.style.display = 'flex';
+            } else {
+                orientationMessage.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('load', checkOrientation);
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+
+        // Biến toàn cục
+        let currentSection = 0; // 0: Nguồn, 1: Thành phần, 2: Hương vị
+        let isDetailView = false;
+        let introGif2Timeout, continuePromptTimeout, sourceGifTimeout;
+
+        // Các phần tử DOM
+        const introScreen = document.getElementById('introScreen');
+        const contentScreen = document.getElementById('contentScreen');
+        const detailScreen = document.getElementById('detailScreen');
+        const introGif1 = document.getElementById('introGif1');
+        const continuePrompt = document.getElementById('continuePrompt');
+        const contentImage = document.getElementById('contentImage');
+        const detailImage = document.getElementById('detailImage');
+        const leftArrow = document.getElementById('leftArrow');
+        const rightArrow = document.getElementById('rightArrow');
+        const detailLeftArrow = document.getElementById('detailLeftArrow');
+        const detailRightArrow = document.getElementById('detailRightArrow');
+        const detailButton = document.getElementById('detailButton');
+        const closeButton = document.getElementById('closeButton');
+        const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3')];
+        const detailDots = [document.getElementById('detailDot1'), document.getElementById('detailDot2'), document.getElementById('detailDot3')];
+
+        // URLs cho các ảnh
+        const normalImages = [
+            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/nguo%CC%82%CC%80n.png?raw=true',
+            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/tha%CC%80nh%20pha%CC%82%CC%80n.png?raw=true',
+            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/hu%CC%9Bo%CC%9Bng%20vi%CC%A3%20.png?raw=true'
+        ];
+
+        const detailImages = [
+            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/nguo%CC%82%CC%80n%20chi%20tie%CC%82%CC%81t.png?raw=true',
+            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/tha%CC%80nh%20pha%CC%82%CC%80n%20chi%20tie%CC%82%CC%81t.png?raw=true',
+            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/hu%CC%9Bo%CC%9Bng%20vi%CC%A3%20chi%20tie%CC%82%CC%81t.png?raw=true'
+        ];
+
+        // Xử lý intro
+        introGif2Timeout = setTimeout(() => {
+            introGif1.src = 'https://github.com/thuyvannnnnn/Q-e/blob/c735701871474faf0ba25bcb58896fea36a04074/%C4%90%E1%BA%B7t%20ngay%20%E2%80%93%20th%C6%B0%E1%BB%9Fng%20th%E1%BB%A9c%20li%E1%BB%81n.%20(2).gif?raw=true';
+        }, 4000);
+
+        continuePromptTimeout = setTimeout(() => {
+            continuePrompt.style.display = 'block';
+        }, 6000);
+
+        // Chuyển từ intro sang màn hình nội dung
+        introScreen.addEventListener('click', () => {
+            clearTimeout(introGif2Timeout);
+            clearTimeout(continuePromptTimeout);
+            introScreen.classList.remove('active');
+            contentScreen.classList.add('active');
+            
+            // Hiển thị GIF nguồn ban đầu
+            contentImage.src = 'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/nguo%CC%82%CC%80n.png?raw=true';
+            
+            // Sau 2 giây chuyển thành ảnh tĩnh
+            sourceGifTimeout = setTimeout(() => {
+                contentImage.src = normalImages[0];
+            }, 2000);
+        });
+
+        // Cập nhật nội dung hiển thị
+        function updateContent() {
+            if (isDetailView) {
+                detailImage.src = detailImages[currentSection];
+                updateDetailDots();
+            } else {
+                contentImage.src = normalImages[currentSection];
+                updateDots();
+            }
+        }
+
+        // Cập nhật các chấm điều hướng
+        function updateDots() {
+            dots.forEach((dot, index) => {
+                if (index === currentSection) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function updateDetailDots() {
+            detailDots.forEach((dot, index) => {
+                if (index === currentSection) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // Xử lý mũi tên điều hướng
+        leftArrow.addEventListener('click', () => {
+            currentSection = (currentSection - 1 + 3) % 3;
+            updateContent();
+        });
+
+        rightArrow.addEventListener('click', () => {
+            currentSection = (currentSection + 1) % 3;
+            updateContent();
+        });
+
+        detailLeftArrow.addEventListener('click', () => {
+            currentSection = (currentSection - 1 + 3) % 3;
+            updateContent();
+        });
+
+        detailRightArrow.addEventListener('click', () => {
+            currentSection = (currentSection + 1) % 3;
+            updateContent();
+        });
+
+        // Xử lý nút xem chi tiết
+        detailButton.addEventListener('click', () => {
+            isDetailView = true;
+            contentScreen.classList.remove('active');
+            detailScreen.classList.add('active');
+            updateContent();
+        });
+
+        // Xử lý nút đóng
+        closeButton.addEventListener('click', () => {
+            isDetailView = false;
+            detailScreen.classList.remove('active');
+            contentScreen.classList.add('active');
+            updateContent();
+        });
+    </script>
 </body>
 </html>
