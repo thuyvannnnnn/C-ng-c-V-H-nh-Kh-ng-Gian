@@ -87,13 +87,14 @@
             object-fit: contain;
         }
 
+        /* THANH NGANG MẢNH - THỤT NHẸ */
         .nav-bar {
             position: absolute;
             bottom: 20px;
-            width: 80%;
-            height: 8px;
-            background-color: #8B4513;
-            border-radius: 4px;
+            width: 88%; /* Thụt nhẹ - chiều rộng 85-90% màn hình */
+            height: 3px; /* Mảnh - độ dày 2-4px */
+            background-color: #8B4513; /* Màu nâu theo asset */
+            border-radius: 2px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -105,7 +106,7 @@
             height: 16px;
             border-radius: 50%;
             background-color: #D2B48C;
-            transform: translateY(-4px);
+            transform: translateY(-6px); /* Điều chỉnh vị trí so với thanh mảnh */
         }
 
         .nav-dot.active {
@@ -140,22 +141,25 @@
             right: 10px;
         }
 
+        /* NÚT CỐ ĐỊNH - VỊ TRÍ KHÔNG THAY ĐỔI */
         .detail-button {
             position: absolute;
-            bottom: 50px;
-            right: 20px;
+            bottom: 30px; /* Cách mép dưới 20-30px */
+            right: 30px;  /* Cách mép phải 20-30px */
             width: 50px;
             height: 50px;
             cursor: pointer;
+            z-index: 20; /* Luôn hiển thị trên cùng */
         }
 
         .close-button {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            bottom: 30px; /* Cùng vị trí với nút Xem chi tiết */
+            right: 30px;  /* Cùng vị trí với nút Xem chi tiết */
             width: 40px;
             height: 40px;
             cursor: pointer;
+            z-index: 20; /* Luôn hiển thị trên cùng */
         }
     </style>
 </head>
