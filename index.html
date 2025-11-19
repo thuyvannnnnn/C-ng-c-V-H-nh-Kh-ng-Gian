@@ -1,357 +1,450 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cà Phê Muối</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cà phê muối — Quảng cáo</title>
+<style>
+  /* ====== Reset & base ====== */
+  * {box-sizing: border-box}
+  html,body{height:100%;margin:0;font-family: "Helvetica Neue", Arial, sans-serif; color:#fff}
+  a{color:inherit;text-decoration:none}
+  /* ====== Background chung ====== */
+  :root{
+    --accent:#e2c48d;
+    --coffee:#5b3926;
+  }
+  body{
+    background-image: url('https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/425e8258fe45e93404cd111a532b172b36ece3a8/nen.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow:hidden;
+  }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-        }
+  /* ====== Splash screen ====== */
+  .splash {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;
+    background: rgba(0,0,0,0.25);
+    z-index:50;
+  }
+  .splash .gif {
+    width: min(520px, 88vw);
+    max-height: 70vh;
+    object-fit:contain;
+    border-radius:10px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    opacity:0; transform:translateY(8px);
+    animation: fadeInUp 1.2s forwards;
+  }
+  @keyframes fadeInUp {
+    to {opacity:1; transform:none}
+  }
 
-        .orientation-message {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            padding: 20px;
-        }
+  .tap {
+    margin-top:18px;
+    font-size:20px;
+    font-weight:600;
+    background: rgba(255,255,255,0.06);
+    padding:10px 20px;
+    border-radius:30px;
+    cursor:not-allowed;
+    opacity:0;
+  }
+  .tap.enabled { cursor:pointer; opacity:1; }
+  .blink { animation: blink 1s infinite; }
+  @keyframes blink {0%,100%{opacity:1}50%{opacity:0}}
 
-        .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-size: cover;
-            background-position: center;
-        }
+  /* ====== App main container ====== */
+  .app {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:10;
+    padding:20px;
+  }
+  .carousel {
+    width: min(1100px, 96vw);
+    max-width:1100px;
+    height: min(720px, 92vh);
+    background: rgba(0,0,0,0.22);
+    border-radius:18px;
+    overflow:hidden;
+    display:flex; align-items:center; justify-content:center; position:relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
 
-        .active {
-            display: flex;
-        }
+  /* Slides wrapper */
+  .slides {
+    width:100%; height:100%; display:flex; transition: transform .55s cubic-bezier(.2,.9,.2,1);
+  }
+  .slide {
+    width:100%; height:100%; flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative;
+    padding:30px;
+  }
+  .slide img.full {
+    width: auto; max-width:60%; max-height:85%;
+    border-radius:8px; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    transition: filter .45s;
+  }
 
-        .intro-gif {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+  /* indicators & arrows */
+  .indicator-bar {
+    position:absolute; bottom:18px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:12px;
+    align-self:flex-end;
+  }
+  .line {
+    width:280px; height:2px; background: rgba(255,255,255,0.12); position:relative; border-radius:2px;
+  }
+  .dots {
+    position:absolute; left:8px; right:8px; top:-12px; height:30px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .dot {
+    width:14px; height:14px; background:rgba(255,255,255,0.28); border-radius:50%; transition:.25s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .dot.big { width:28px; height:28px; background:var(--accent); color:#333; font-weight:700; }
+  .arrow {
+    position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
+    background: rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+  .arrow.left { left:14px }
+  .arrow.right { right:14px }
+  .arrow:hover { transform: translateY(-50%) scale(1.05); background: rgba(255,255,255,0.11) }
 
-        .info-settings {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-        }
+  /* Địa điểm: hint kéo xuống */
+  .down-hint {
+    position:absolute; bottom:92px; left:50%; transform:translateX(-50%); text-align:center; opacity:0;
+    transition:opacity .4s;
+  }
+  .down-hint.visible { opacity:1 }
+  .down-hint .arrow-down {
+    display:block; font-size:28px; transform:translateY(0); animation: bounce 1.4s infinite;
+  }
+  @keyframes bounce { 0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)} }
 
-        .continue-prompt {
-            position: absolute;
-            bottom: 20px;
-            width: 200px;
-            animation: pulse 2s infinite;
-        }
+  /* ====== Section reveal (Buôn Ma Thuột) ====== */
+  .reveal-container {
+    position:relative; width:100%; height:100%; overflow:auto; background: linear-gradient(180deg, rgba(0,0,0,0.22), rgba(0,0,0,0.4));
+  }
+  .reveal-top {
+    height:45%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px;
+    transform: translateY(40px); opacity:0; transition: all .5s;
+  }
+  .reveal-top.visible { transform:none; opacity:1 }
+  .city-title { font-size:36px; font-weight:800; letter-spacing:1px; color:var(--accent) }
+  .icons-row { display:flex; gap:18px; align-items:center; justify-content:center; flex-wrap:wrap; padding:10px; }
+  .place-icon {
+    width:96px; height:96px; background: rgba(255,255,255,0.06); border-radius:14px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.4); transition: transform .22s, box-shadow .22s;
+  }
+  .place-icon img { max-width:70%; max-height:70% }
+  .place-icon:hover { transform: translateY(-6px); box-shadow: 0 20px 30px rgba(0,0,0,0.6) }
 
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
+  /* ========== Popup / Modal ========== */
+  .modal-backdrop {
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:80;
+    background: rgba(0,0,0,0.6);
+  }
+  .modal-backdrop.show { display:flex }
+  .modal {
+    width:min(760px,92vw); max-height:86vh; overflow:auto; background:#fff; color:#111; border-radius:12px; padding:18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+  .modal img { max-width:100%; display:block; border-radius:6px; margin-bottom:12px }
+  .modal .close {
+    position:absolute; right:18px; top:12px; background:transparent; border:none; font-size:18px; cursor:pointer;
+  }
 
-        .content-image {
-            max-width: 90%;
-            max-height: 80%;
-            object-fit: contain;
-        }
+  /* ========== Đặt ngay button ========== */
+  .order-btn {
+    position:fixed; right:20px; bottom:20px; z-index:70;
+    background:var(--coffee); color:#fff; padding:14px 18px; border-radius:14px; font-weight:700; cursor:pointer;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+  }
+  .order-btn:hover { transform:translateY(-4px) }
 
-        /* THANH NGANG MẢNH - THỤT NHẸ */
-        .nav-bar {
-            position: absolute;
-            bottom: 20px;
-            width: 88%; /* Thụt nhẹ - chiều rộng 85-90% màn hình */
-            height: 3px; /* Mảnh - độ dày 2-4px */
-            background-color: #8B4513; /* Màu nâu theo asset */
-            border-radius: 2px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 10%;
-        }
-
-        .nav-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background-color: #D2B48C;
-            transform: translateY(-6px); /* Điều chỉnh vị trí so với thanh mảnh */
-        }
-
-        .nav-dot.active {
-            width: 24px;
-            height: 24px;
-            background-color: #8B4513;
-            border: 2px solid #D2B48C;
-        }
-
-        .nav-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background-color: rgba(139, 69, 19, 0.7);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .nav-arrow.left {
-            left: 10px;
-        }
-
-        .nav-arrow.right {
-            right: 10px;
-        }
-
-        /* NÚT CỐ ĐỊNH - VỊ TRÍ KHÔNG THAY ĐỔI */
-        .detail-button {
-            position: absolute;
-            bottom: 30px; /* Cách mép dưới 20-30px */
-            right: 30px;  /* Cách mép phải 20-30px */
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            z-index: 20; /* Luôn hiển thị trên cùng */
-        }
-
-        .close-button {
-            position: absolute;
-            bottom: 30px; /* Cùng vị trí với nút Xem chi tiết */
-            right: 30px;  /* Cùng vị trí với nút Xem chi tiết */
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            z-index: 20; /* Luôn hiển thị trên cùng */
-        }
-    </style>
+  /* ====== Responsive ====== */
+  @media (max-width:720px){
+    .carousel { height: 88vh; }
+    .slide img.full { max-width:86%; }
+    .city-title { font-size:28px }
+    .place-icon { width:78px; height:78px }
+  }
+</style>
 </head>
 <body>
-    <!-- Màn hình yêu cầu xoay ngang -->
-    <div class="orientation-message" id="orientationMessage">
-        <h2>Vui lòng xoay ngang điện thoại</h2>
-        <p>Để có trải nghiệm tốt nhất, hãy xoay ngang thiết bị của bạn</p>
-    </div>
 
-    <!-- Màn hình mở đầu (Intro) -->
-    <div class="screen active" id="introScreen" style="background-image: url('https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ne%CC%82%CC%80n.PNG?raw=true');">
-        <img src="https://github.com/thuyvannnnnn/Q-e/blob/c735701871474faf0ba25bcb58896fea36a04074/%C4%90%E1%BA%B7t%20ngay%20%E2%80%93%20th%C6%B0%E1%BB%9Fng%20th%E1%BB%A9c%20li%E1%BB%81n.%20(1).gif?raw=true" alt="Intro 1" class="intro-gif" id="introGif1">
-        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ca%CC%80i%20%C4%91a%CC%A3%CC%86t%20gif.gif?raw=true" alt="Cài đặt" class="info-settings">
-        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ba%CC%82%CC%81m%20%C4%91e%CC%82%CC%89%20tie%CC%82%CC%81p%20gif.gif?raw=true" alt="Bấm để tiếp tục" class="continue-prompt" id="continuePrompt">
-    </div>
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <img class="gif" src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/425e8258fe45e93404cd111a532b172b36ece3a8/Ph%C3%BAc%20Long.gif" alt="Phuc Long GIF">
+  <div id="taptext" class="tap">Bấm để tiếp tục</div>
+</div>
 
-    <!-- Màn hình Nguồn - Thành phần - Hương vị -->
-    <div class="screen" id="contentScreen" style="background-image: url('https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ne%CC%82%CC%80n.PNG?raw=true');">
-        <div class="nav-arrow left" id="leftArrow">‹</div>
-        <div class="nav-arrow right" id="rightArrow">›</div>
-        
-        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/nguo%CC%82%CC%80n.png?raw=true" alt="Nguồn" class="content-image" id="contentImage">
-        
-        <div class="nav-bar">
-            <div class="nav-dot" id="dot1"></div>
-            <div class="nav-dot active" id="dot2"></div>
-            <div class="nav-dot" id="dot3"></div>
+<!-- APP -->
+<div class="app" id="app" aria-hidden="true">
+  <div class="carousel" role="region" aria-label="Trình quảng cáo cà phê muối">
+    <div class="arrow left" id="leftArrow" title="Lùi (trái)">&lt;</div>
+    <div class="arrow right" id="rightArrow" title="Tiến (phải)">&gt;</div>
+
+    <div class="slides" id="slides">
+      <!-- Slide 0: Nguồn -->
+      <section class="slide" data-slide="0">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+          <img class="full" src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/425e8258fe45e93404cd111a532b172b36ece3a8/nguoon.png" alt="Nguồn">
+          <div style="display:flex;gap:12px;align-items:center">
+            <button class="detail-btn" data-type="nguon">Xem chi tiết</button>
+          </div>
         </div>
-        
-        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/xem%20chi%20tie%CC%82%CC%81t%20.png?raw=true" alt="Xem chi tiết" class="detail-button" id="detailButton">
-    </div>
+      </section>
 
-    <!-- Màn hình chi tiết -->
-    <div class="screen" id="detailScreen" style="background-image: url('https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/ne%CC%82%CC%80n.PNG?raw=true');">
-        <div class="nav-arrow left" id="detailLeftArrow">‹</div>
-        <div class="nav-arrow right" id="detailRightArrow">›</div>
-        
-        <img src="" alt="Chi tiết" class="content-image" id="detailImage">
-        
-        <div class="nav-bar">
-            <div class="nav-dot" id="detailDot1"></div>
-            <div class="nav-dot active" id="detailDot2"></div>
-            <div class="nav-dot" id="detailDot3"></div>
+      <!-- Slide 1: Nguyên liệu -->
+      <section class="slide" data-slide="1">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+          <img class="full" src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/425e8258fe45e93404cd111a532b172b36ece3a8/nguyeen%20lieu.png" alt="Nguyên liệu">
+          <div style="display:flex;gap:12px;align-items:center">
+            <button class="detail-btn" data-type="nguyenlieu">Xem chi tiết</button>
+          </div>
         </div>
-        
-        <img src="https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/%C4%91o%CC%81ng.png?raw=true" alt="Đóng" class="close-button" id="closeButton">
+      </section>
+
+      <!-- Slide 2: Địa điểm -->
+      <section class="slide" data-slide="2">
+        <!-- reveal-container cho phần kéo xuống -->
+        <div class="reveal-container" id="revealContainer">
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+            <img class="full" src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/%C4%90a%CC%A3%CC%86t%20ngay%20%E2%80%93%20thu%CC%9Bo%CC%9B%CC%89ng%20thu%CC%9B%CC%81c%20lie%CC%82%CC%80n.%20(1080%20x%201350%20px)%20(1080%20x%201920%20px).png" alt="Dia diem">
+          </div>
+
+          <!-- hidden reveal area -->
+          <div style="padding:18px;">
+            <div id="revealTop" class="reveal-top">
+              <div class="city-title">Buôn Ma Thuột</div>
+              <div class="icons-row" id="iconsRow">
+                <!-- icons (dau.png) -->
+                <div class="place-icon" data-place="Quán Muối 1"><img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/dau.png" alt="dau"></div>
+                <div class="place-icon" data-place="Quán Muối 2"><img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/dau.png" alt="dau"></div>
+                <div class="place-icon" data-place="Quán Muối 3"><img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/dau.png" alt="dau"></div>
+                <div class="place-icon" data-place="Quán Muối 4"><img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/dau.png" alt="dau"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
     </div>
 
-    <script>
-        // Kiểm tra hướng màn hình
-        function checkOrientation() {
-            const orientationMessage = document.getElementById('orientationMessage');
-            if (window.innerHeight > window.innerWidth) {
-                orientationMessage.style.display = 'flex';
-            } else {
-                orientationMessage.style.display = 'none';
-            }
-        }
+    <!-- indicator bar -->
+    <div class="indicator-bar">
+      <div class="line">
+        <div class="dots" id="dots">
+          <div class="dot big" data-index="0">1</div>
+          <div class="dot" data-index="1"></div>
+          <div class="dot" data-index="2"></div>
+        </div>
+      </div>
+    </div>
 
-        window.addEventListener('load', checkOrientation);
-        window.addEventListener('resize', checkOrientation);
-        window.addEventListener('orientationchange', checkOrientation);
+    <!-- down hint -->
+    <div class="down-hint" id="downHint">
+      <div class="arrow-down">⬇</div>
+      <div style="font-weight:600">Kéo xuống</div>
+    </div>
 
-        // Biến toàn cục
-        let currentSection = 0; // 0: Nguồn, 1: Thành phần, 2: Hương vị
-        let isDetailView = false;
-        let introGif2Timeout, continuePromptTimeout, sourceGifTimeout;
+  </div>
+</div>
 
-        // Các phần tử DOM
-        const introScreen = document.getElementById('introScreen');
-        const contentScreen = document.getElementById('contentScreen');
-        const detailScreen = document.getElementById('detailScreen');
-        const introGif1 = document.getElementById('introGif1');
-        const continuePrompt = document.getElementById('continuePrompt');
-        const contentImage = document.getElementById('contentImage');
-        const detailImage = document.getElementById('detailImage');
-        const leftArrow = document.getElementById('leftArrow');
-        const rightArrow = document.getElementById('rightArrow');
-        const detailLeftArrow = document.getElementById('detailLeftArrow');
-        const detailRightArrow = document.getElementById('detailRightArrow');
-        const detailButton = document.getElementById('detailButton');
-        const closeButton = document.getElementById('closeButton');
-        const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3')];
-        const detailDots = [document.getElementById('detailDot1'), document.getElementById('detailDot2'), document.getElementById('detailDot3')];
+<!-- Modal backdrop for details -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modalContent">
+    <button class="close" id="modalClose">✕</button>
+    <div id="modalInner"></div>
+  </div>
+</div>
 
-        // URLs cho các ảnh
-        const normalImages = [
-            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/nguo%CC%82%CC%80n.png?raw=true',
-            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/tha%CC%80nh%20pha%CC%82%CC%80n.png?raw=true',
-            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/hu%CC%9Bo%CC%9Bng%20vi%CC%A3%20.png?raw=true'
-        ];
+<!-- Order button -->
+<button class="order-btn" id="orderBtn">Đặt ngay</button>
 
-        const detailImages = [
-            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/nguo%CC%82%CC%80n%20chi%20tie%CC%82%CC%81t.png?raw=true',
-            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/tha%CC%80nh%20pha%CC%82%CC%80n%20chi%20tie%CC%82%CC%81t.png?raw=true',
-            'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/hu%CC%9Bo%CC%9Bng%20vi%CC%A3%20chi%20tie%CC%82%CC%81t.png?raw=true'
-        ];
+<script>
+/* ========== MAIN JS ========== */
+(function(){
+  const splash = document.getElementById('splash');
+  const tapText = document.getElementById('taptext');
+  const app = document.getElementById('app');
+  const slides = document.getElementById('slides');
+  const leftArrow = document.getElementById('leftArrow');
+  const rightArrow = document.getElementById('rightArrow');
+  const dots = document.querySelectorAll('.dot');
+  const downHint = document.getElementById('downHint');
+  const revealTop = document.getElementById('revealTop');
+  const revealContainer = document.getElementById('revealContainer');
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalInner = document.getElementById('modalInner');
+  const modalClose = document.getElementById('modalClose');
+  const orderBtn = document.getElementById('orderBtn');
 
-        // Xử lý intro
-        introGif2Timeout = setTimeout(() => {
-            introGif1.src = 'https://github.com/thuyvannnnnn/Q-e/blob/c735701871474faf0ba25bcb58896fea36a04074/%C4%90%E1%BA%B7t%20ngay%20%E2%80%93%20th%C6%B0%E1%BB%9Fng%20th%E1%BB%A9c%20li%E1%BB%81n.%20(2).gif?raw=true';
-        }, 4000);
+  let current = 0;
+  let canProceed = false; // for splash 2s rule
+  let revealShown = false;
 
-        continuePromptTimeout = setTimeout(() => {
-            continuePrompt.style.display = 'block';
-        }, 6000);
+  // enable tap after 2s
+  setTimeout(() => {
+    tapText.classList.add('enabled','blink');
+    tapText.style.cursor = 'pointer';
+    canProceed = true;
+  }, 2000);
 
-        // Chuyển từ intro sang màn hình nội dung
-        introScreen.addEventListener('click', () => {
-            clearTimeout(introGif2Timeout);
-            clearTimeout(continuePromptTimeout);
-            introScreen.classList.remove('active');
-            contentScreen.classList.add('active');
-            
-            // Hiển thị GIF nguồn ban đầu
-            contentImage.src = 'https://github.com/thuyvannnnnn/Q-e/blob/04d8c65826f6b945826769957bf1501072469557/nguo%CC%82%CC%80n.png?raw=true';
-            
-            // Sau 2 giây chuyển thành ảnh tĩnh
-            sourceGifTimeout = setTimeout(() => {
-                contentImage.src = normalImages[0];
-            }, 2000);
-        });
+  // Splash click
+  function enterApp() {
+    if(!canProceed) return;
+    splash.style.transition = 'opacity .5s';
+    splash.style.opacity = 0;
+    setTimeout(()=>{ splash.style.display='none'; app.setAttribute('aria-hidden','false') }, 540);
+  }
 
-        // Cập nhật nội dung hiển thị
-        function updateContent() {
-            if (isDetailView) {
-                detailImage.src = detailImages[currentSection];
-                updateDetailDots();
-            } else {
-                contentImage.src = normalImages[currentSection];
-                updateDots();
-            }
-        }
+  splash.addEventListener('click', enterApp);
+  tapText.addEventListener('click', enterApp);
 
-        // Cập nhật các chấm điều hướng
-        function updateDots() {
-            dots.forEach((dot, index) => {
-                if (index === currentSection) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
+  // slide control
+  function goTo(index) {
+    index = Math.max(0, Math.min(2, index));
+    current = index;
+    slides.style.transform = `translateX(-${index * 100}%)`;
 
-        function updateDetailDots() {
-            detailDots.forEach((dot, index) => {
-                if (index === currentSection) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
+    // update dots
+    dots.forEach((d,i)=>{
+      d.classList.toggle('big', i === index);
+      d.style.background = (i === index) ? 'var(--accent)' : 'rgba(255,255,255,0.28)';
+      d.textContent = (i === index) ? (i+1) : '';
+    });
 
-        // Xử lý mũi tên điều hướng
-        leftArrow.addEventListener('click', () => {
-            currentSection = (currentSection - 1 + 3) % 3;
-            updateContent();
-        });
+    // when at index 2 (Địa điểm) -> show down hint after 2s
+    if(index === 2) {
+      // hide reveal initially
+      revealTop.classList.remove('visible');
+      revealShown = false;
+      setTimeout(()=> {
+        downHint.classList.add('visible');
+      }, 2000);
+    } else {
+      downHint.classList.remove('visible');
+    }
+  }
 
-        rightArrow.addEventListener('click', () => {
-            currentSection = (currentSection + 1) % 3;
-            updateContent();
-        });
+  leftArrow.addEventListener('click', () => goTo(current-1));
+  rightArrow.addEventListener('click', () => goTo(current+1));
+  dots.forEach(d=> d.addEventListener('click', (e)=> goTo(Number(d.dataset.index))));
 
-        detailLeftArrow.addEventListener('click', () => {
-            currentSection = (currentSection - 1 + 3) % 3;
-            updateContent();
-        });
+  // initial
+  goTo(0);
 
-        detailRightArrow.addEventListener('click', () => {
-            currentSection = (currentSection + 1) % 3;
-            updateContent();
-        });
+  // show reveal when user scrolls / clicks downHint / touches inside the slide area
+  downHint.addEventListener('click', revealArea);
+  // allow swipe/drag: detect wheel/touchmove on revealContainer
+  let touchStartY = null;
+  revealContainer.addEventListener('wheel', (e)=>{
+    if(current === 2 && e.deltaY > 20) revealArea();
+  }, {passive:true});
+  revealContainer.addEventListener('touchstart', (e)=> { touchStartY = e.touches[0].clientY; }, {passive:true});
+  revealContainer.addEventListener('touchmove', (e)=> {
+    if(!touchStartY) return;
+    let dy = touchStartY - e.touches[0].clientY;
+    if(current === 2 && dy > 30) revealArea();
+  }, {passive:true});
 
-        // Xử lý nút xem chi tiết
-        detailButton.addEventListener('click', () => {
-            isDetailView = true;
-            contentScreen.classList.remove('active');
-            detailScreen.classList.add('active');
-            updateContent();
-        });
+  function revealArea() {
+    if(revealShown) return;
+    revealShown = true;
+    revealTop.classList.add('visible');
+    downHint.classList.remove('visible');
+  }
 
-        // Xử lý nút đóng
-        closeButton.addEventListener('click', () => {
-            isDetailView = false;
-            detailScreen.classList.remove('active');
-            contentScreen.classList.add('active');
-            updateContent();
-        });
-    </script>
+  // place icons click -> show list of cafes (example content)
+  document.querySelectorAll('.place-icon').forEach(icon => {
+    icon.addEventListener('click', ()=>{
+      const placeName = icon.dataset.place || 'Quán cà phê';
+      openModal(`<h2>${placeName}</h2>
+        <p>Danh sách quán cà phê muối ở <strong>Buôn Ma Thuột</strong> (ví dụ):</p>
+        <ul>
+          <li><strong>Muối & Cà phê</strong> — 12 Nguyễn Văn Cừ</li>
+          <li><strong>Góc Muối</strong> — 45 Lê Duẩn</li>
+          <li><strong>Cà phê Muối Nhà</strong> — 78 Đường Trần Hưng Đạo</li>
+        </ul>
+        <p>Góc phải dưới có nút <strong>Đặt ngay</strong> để bản demo mô phỏng hành động đặt.</p>
+      `);
+    });
+  });
+
+  // modal open/close
+  function openModal(html) {
+    modalInner.innerHTML = html;
+    modalBackdrop.classList.add('show');
+  }
+  modalClose.addEventListener('click', ()=> modalBackdrop.classList.remove('show'));
+  modalBackdrop.addEventListener('click', (e)=> { if(e.target === modalBackdrop) modalBackdrop.classList.remove('show'); });
+
+  // Detail buttons (Nguồn / Nguyên liệu)
+  document.querySelectorAll('.detail-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const t = btn.dataset.type;
+      if(t === 'nguon') {
+        openModal(`
+          <h2>Nguồn (chi tiết)</h2>
+          <img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/nguon%20chi.png" alt="Nguon chi tiet">
+          <p>Mô tả nguồn: ... (thông tin nguồn, quy trình thu hái, câu chuyện nông dân, v.v.)</p>
+        `);
+      } else if(t === 'nguyenlieu') {
+        openModal(`
+          <h2>Nguyên liệu (chi tiết)</h2>
+          <img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/thanh%20phan%20chi.png" alt="Nguyen lieu chi tiet">
+          <p>Mô tả nguyên liệu: muối hồng, hạt cà phê chọn lọc, tỉ lệ, cách ướp,...</p>
+        `);
+      }
+    });
+  });
+
+  // Order button behavior (demo)
+  orderBtn.addEventListener('click', ()=> {
+    openModal(`<h2>Đặt ngay</h2>
+      <p>Form đặt hàng (demo). Điền thông tin và xác nhận.</p>
+      <form onsubmit="return false;">
+        <label>Tên: <input required style="width:100%;padding:8px;margin:6px 0"></label>
+        <label>Số điện thoại: <input required style="width:100%;padding:8px;margin:6px 0"></label>
+        <label>Ghi chú: <textarea style="width:100%;padding:8px;margin:6px 0"></textarea></label>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button type="button" onclick="document.getElementById('modalBackdrop').classList.remove('show')">Hủy</button>
+          <button type="button" onclick="alert('Cảm ơn! Yêu cầu đặt hàng đã được gửi (demo).'); document.getElementById('modalBackdrop').classList.remove('show')">Xác nhận</button>
+        </div>
+      </form>`);
+  });
+
+  // keyboard navigation
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowLeft') goTo(current-1);
+    if(e.key === 'ArrowRight') goTo(current+1);
+  });
+
+  // small touch-swipe support for slides
+  let sx=null, sy=null;
+  slides.addEventListener('touchstart', (e)=> { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+  slides.addEventListener('touchend', (e)=> {
+    if(sx === null) return;
+    const ex = e.changedTouches[0].clientX;
+    const dx = sx - ex;
+    if(Math.abs(dx) > 40 && Math.abs(dx) > 0.3 * (sy || 1)) {
+      if(dx > 0) goTo(current+1); else goTo(current-1);
+    }
+    sx=null; sy=null;
+  }, {passive:true});
+
+  // Accessibility: allow clicking large slide area to advance once reveal shown (optional)
+  slides.addEventListener('click', (e)=> {
+    // if click on slide while on slide2 and reveal shown do nothing
+    // otherwise advance
+    if(current !== 2) goTo(current+1);
+  });
+
+})();
+</script>
 </body>
 </html>
