@@ -82,9 +82,11 @@
     padding:30px;
   }
   .slide img.full {
-    width: auto; max-width:60%; max-height:85%;
+    width: auto; 
+    max-width: 100%; 
+    max-height: 100%;
     border-radius:8px;
-    /* Đã loại bỏ hiệu ứng bóng đổ */
+    object-fit: contain;
   }
 
   /* indicators & arrows */
@@ -107,10 +109,10 @@
     position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
     background: rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; cursor:pointer;
     box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-    z-index: 20; /* Thêm z-index để đảm bảo nút hiển thị trên cùng */
+    z-index: 20;
   }
-  .arrow.left { left:14px }
-  .arrow.right { right:14px }
+  .arrow.left { left:5px; }
+  .arrow.right { right:5px; }
   .arrow:hover { transform: translateY(-50%) scale(1.05); background: rgba(255,255,255,0.11) }
 
   /* Địa điểm: hint kéo xuống */
@@ -186,24 +188,49 @@
     transform: translateY(-2px);
   }
 
-  /* ========== Up hint ========== */
-  .up-hint {
-    position:absolute; top:20px; left:50%; transform:translateX(-50%); text-align:center; opacity:0;
-    transition:opacity .4s;
-    z-index: 15;
+  /* ========== Chi tiết slide ========== */
+  .detail-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
   }
-  .up-hint.visible { opacity:1 }
-  .up-hint .arrow-up {
-    display:block; font-size:28px; transform:translateY(0); animation: bounceUp 1.4s infinite;
+  .detail-slide.active {
+    display: flex;
   }
-  @keyframes bounceUp { 0%{transform:translateY(0)}50%{transform:translateY(10px)}100%{transform:translateY(0)} }
+  .detail-slide img {
+    max-width: 100%;
+    max-height: 80%;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  .back-btn {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    margin-top: 15px;
+  }
+  .back-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+  }
 
   /* ====== Responsive ====== */
   @media (max-width:720px){
     .carousel { height: 88vh; }
-    .slide img.full { max-width:86%; }
+    .slide img.full { max-width: 100%; }
     .city-title { font-size:28px }
     .place-icon { width:78px; height:78px }
+    .arrow.left { left: 2px; }
+    .arrow.right { right: 2px; }
   }
 </style>
 </head>
@@ -224,21 +251,35 @@
     <div class="slides" id="slides">
       <!-- Slide 0: Nguồn -->
       <section class="slide" data-slide="0">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:18px; width: 100%; height: 100%;">
           <img class="full" src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/425e8258fe45e93404cd111a532b172b36ece3a8/nguoon.png" alt="Nguồn">
           <div style="display:flex;gap:12px;align-items:center">
             <button class="detail-btn" data-type="nguon">Xem chi tiết</button>
           </div>
         </div>
+        
+        <!-- Chi tiết nguồn (ẩn ban đầu) -->
+        <div class="detail-slide" id="nguon-detail">
+          <img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/nguon%20chi.png" alt="Nguồn chi tiết">
+          <p style="text-align:center; margin-top: 15px; max-width: 80%;">Mô tả nguồn: ... (thông tin nguồn, quy trình thu hái, câu chuyện nông dân, v.v.)</p>
+          <button class="back-btn" data-type="nguon">Quay lại</button>
+        </div>
       </section>
 
       <!-- Slide 1: Nguyên liệu -->
       <section class="slide" data-slide="1">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:18px; width: 100%; height: 100%;">
           <img class="full" src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/425e8258fe45e93404cd111a532b172b36ece3a8/nguyeen%20lieu.png" alt="Nguyên liệu">
           <div style="display:flex;gap:12px;align-items:center">
             <button class="detail-btn" data-type="nguyenlieu">Xem chi tiết</button>
           </div>
+        </div>
+        
+        <!-- Chi tiết nguyên liệu (ẩn ban đầu) -->
+        <div class="detail-slide" id="nguyenlieu-detail">
+          <img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/thanh%20phan%20chi.png" alt="Nguyên liệu chi tiết">
+          <p style="text-align:center; margin-top: 15px; max-width: 80%;">Mô tả nguyên liệu: muối hồng, hạt cà phê chọn lọc, tỉ lệ, cách ướp,...</p>
+          <button class="back-btn" data-type="nguyenlieu">Quay lại</button>
         </div>
       </section>
 
@@ -246,7 +287,7 @@
       <section class="slide" data-slide="2">
         <!-- reveal-container cho phần kéo xuống -->
         <div class="reveal-container" id="revealContainer">
-          <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+          <div style="flex:1;display:flex;align-items:center;justify-content:center; width: 100%; height: 100%;">
             <img class="full" src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/%C4%90a%CC%A3%CC%86t%20ngay%20%E2%80%93%20thu%CC%9Bo%CC%9B%CC%89ng%20thu%CC%9B%CC%81c%20lie%CC%82%CC%80n.%20(1080%20x%201350%20px)%20(1080%20x%201920%20px).png" alt="Dia diem">
           </div>
 
@@ -285,12 +326,6 @@
       <div style="font-weight:600">Kéo xuống</div>
     </div>
 
-    <!-- up hint -->
-    <div class="up-hint" id="upHint">
-      <div class="arrow-up">⬆</div>
-      <div style="font-weight:600">Kéo lên</div>
-    </div>
-
   </div>
 </div>
 
@@ -316,7 +351,6 @@
   const rightArrow = document.getElementById('rightArrow');
   const dots = document.querySelectorAll('.dot');
   const downHint = document.getElementById('downHint');
-  const upHint = document.getElementById('upHint');
   const revealTop = document.getElementById('revealTop');
   const revealContainer = document.getElementById('revealContainer');
   const modalBackdrop = document.getElementById('modalBackdrop');
@@ -327,7 +361,7 @@
   let current = 0;
   let canProceed = false; // for splash 2s rule
   let revealShown = false;
-  let isScrolling = false;
+  let hasShownDownHint = false; // Biến để theo dõi đã hiển thị mũi tên xuống chưa
 
   // enable tap after 2s
   setTimeout(() => {
@@ -360,18 +394,17 @@
       d.textContent = (i === index) ? (i+1) : '';
     });
 
-    // when at index 2 (Địa điểm) -> show down hint after 2s
-    if(index === 2) {
+    // when at index 2 (Địa điểm) -> show down hint after 2s (chỉ hiển thị một lần)
+    if(index === 2 && !hasShownDownHint) {
       // hide reveal initially
       revealTop.classList.remove('visible');
       revealShown = false;
-      upHint.classList.remove('visible');
       setTimeout(()=> {
         downHint.classList.add('visible');
+        hasShownDownHint = true; // Đánh dấu đã hiển thị
       }, 2000);
     } else {
       downHint.classList.remove('visible');
-      upHint.classList.remove('visible');
     }
   }
 
@@ -393,15 +426,12 @@
 
   // show reveal when user scrolls / clicks downHint / touches inside the slide area
   downHint.addEventListener('click', revealArea);
-  upHint.addEventListener('click', hideArea);
   
   // allow swipe/drag: detect wheel/touchmove on revealContainer
   let touchStartY = null;
   revealContainer.addEventListener('wheel', (e)=>{
     if(current === 2 && e.deltaY > 20 && !revealShown) {
       revealArea();
-    } else if(current === 2 && e.deltaY < -20 && revealShown) {
-      hideArea();
     }
   }, {passive:true});
   
@@ -410,18 +440,15 @@
   }, {passive:true});
   
   revealContainer.addEventListener('touchmove', (e)=> {
-    if(!touchStartY || isScrolling) return;
+    if(!touchStartY) return;
     let dy = touchStartY - e.touches[0].clientY;
     if(current === 2 && dy > 30 && !revealShown) {
       revealArea();
-    } else if(current === 2 && dy < -30 && revealShown) {
-      hideArea();
     }
   }, {passive:true});
 
   function revealArea() {
-    if(revealShown || isScrolling) return;
-    isScrolling = true;
+    if(revealShown) return;
     revealShown = true;
     
     // Cuộn xuống phần reveal
@@ -433,27 +460,6 @@
     setTimeout(() => {
       revealTop.classList.add('visible');
       downHint.classList.remove('visible');
-      upHint.classList.add('visible');
-      isScrolling = false;
-    }, 500);
-  }
-
-  function hideArea() {
-    if(!revealShown || isScrolling) return;
-    isScrolling = true;
-    revealShown = false;
-    
-    // Cuộn lên phần đầu
-    revealContainer.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-    
-    setTimeout(() => {
-      revealTop.classList.remove('visible');
-      upHint.classList.remove('visible');
-      downHint.classList.add('visible');
-      isScrolling = false;
     }, 500);
   }
 
@@ -486,19 +492,28 @@
     btn.addEventListener('click', (e)=>{
       e.stopPropagation(); // Ngăn sự kiện lan ra ngoài
       const t = btn.dataset.type;
-      if(t === 'nguon') {
-        openModal(`
-          <h2>Nguồn (chi tiết)</h2>
-          <img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/nguon%20chi.png" alt="Nguon chi tiet">
-          <p>Mô tả nguồn: ... (thông tin nguồn, quy trình thu hái, câu chuyện nông dân, v.v.)</p>
-        `);
-      } else if(t === 'nguyenlieu') {
-        openModal(`
-          <h2>Nguyên liệu (chi tiết)</h2>
-          <img src="https://raw.githubusercontent.com/focustimewithcake/-m-thanh-h-nh-nh/2fd47fd0aef709549cd3dec1a6e592c13718326b/thanh%20phan%20chi.png" alt="Nguyen lieu chi tiet">
-          <p>Mô tả nguyên liệu: muối hồng, hạt cà phê chọn lọc, tỉ lệ, cách ướp,...</p>
-        `);
-      }
+      const slide = btn.closest('.slide');
+      const detailSlide = slide.querySelector(`#${t}-detail`);
+      const mainContent = slide.querySelector('div:first-child');
+      
+      // Ẩn nội dung chính, hiển thị chi tiết
+      mainContent.style.display = 'none';
+      detailSlide.classList.add('active');
+    });
+  });
+
+  // Back buttons (Quay lại từ chi tiết)
+  document.querySelectorAll('.back-btn').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation(); // Ngăn sự kiện lan ra ngoài
+      const t = btn.dataset.type;
+      const slide = btn.closest('.slide');
+      const detailSlide = slide.querySelector(`#${t}-detail`);
+      const mainContent = slide.querySelector('div:first-child');
+      
+      // Ẩn chi tiết, hiển thị nội dung chính
+      detailSlide.classList.remove('active');
+      mainContent.style.display = 'flex';
     });
   });
 
