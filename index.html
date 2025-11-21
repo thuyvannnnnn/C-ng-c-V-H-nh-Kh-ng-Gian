@@ -87,6 +87,9 @@
     max-height: 100%;
     border-radius:8px;
     object-fit: contain;
+    /* Loại bỏ tất cả hiệu ứng bóng đổ */
+    box-shadow: none !important;
+    filter: none !important;
   }
 
   /* indicators & arrows */
@@ -181,9 +184,8 @@
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s;
-    margin-top: 10px;
-    position: relative;
-    top: 10%; /* Di chuyển lên 10% */
+    /* Di chuyển lên 10% */
+    margin-top: -10%;
   }
   .detail-btn:hover {
     background: rgba(255,255,255,0.2);
@@ -208,6 +210,9 @@
     max-height: 80%;
     object-fit: contain;
     border-radius: 8px;
+    /* Loại bỏ hiệu ứng bóng đổ */
+    box-shadow: none !important;
+    filter: none !important;
   }
   .back-btn {
     background: rgba(255,255,255,0.1);
@@ -218,9 +223,8 @@
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s;
-    margin-top: 15px;
-    position: relative;
-    top: 10%; /* Di chuyển lên 10% */
+    /* Di chuyển lên 10% */
+    margin-top: -10%;
   }
   .back-btn:hover {
     background: rgba(255,255,255,0.2);
@@ -235,6 +239,9 @@
     .place-icon { width:78px; height:78px }
     .arrow.left { left: 2px; }
     .arrow.right { right: 2px; }
+    .detail-btn, .back-btn {
+      margin-top: -5%; /* Điều chỉnh cho mobile */
+    }
   }
 </style>
 </head>
